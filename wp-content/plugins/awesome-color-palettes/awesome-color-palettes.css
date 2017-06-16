@@ -1,0 +1,23 @@
+.awe-color-palette:before, .awe-color-palette:after { content: " "; display: table; }
+.awe-color-palette:after { clear: both; }
+.awe-color-palette { *zoom: 1; }
+
+.awe-color-palette .palette { padding: 20px; width: 100%; margin: 0 auto; }
+
+.awe-color-palette .color { float: left; position: relative;margin-top: 9px; width: 20%; color: #fff; transition: all 0.5s linear; overflow: hidden; }
+/*.awe-color-palette .color span { position: absolute; bottom: -20px; left: -20px; opacity: 0; transition: all 0.2s linear; }*/
+
+/*.awe-color-palette .palette:hover { width: 90%; }*/
+
+.awe-color-palette .color:hover { border: 2px solid blue;}
+.color.active { border: 2px solid blue;}
+.alert {border:1px solid red !important; transition: all 0.8s linear; overflow: hidden;}
+/*.awe-color-palette.count-2 .color { width: 50%; }
+.awe-color-palette.count-3 .color { width: 20%; }
+.awe-color-palette.count-4 .color { width: 25%; }
+.awe-color-palette.count-6 .color { width: 16%; font-size: 0.9em; }
+.awe-color-palette.count-7 .color { width: 14%; font-size: 0.9em; }*/
+.awe-color-palette.count-8 .color { width: 11%; font-size: 0.8em; }
+.awe-color-palette.count-9 .color { width: 10%; font-size: 0.8em; }
+.awe-color-palette.count-10 .color { width: 9%; font-size: 0.8em; }
+.awe-color-palette.count-11 .color { width: 8%; font-size: 0.8em; }
