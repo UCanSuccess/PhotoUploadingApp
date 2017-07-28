@@ -1,0 +1,3 @@
+<div class="wpb_column column_container  _ height-full detail_nav_part" style="border-right:1px solid;">
+    <img src="http://localhost/wp-content/uploads/bfi_thumb/book_ready.png">&nbsp;1 book read
+</div>

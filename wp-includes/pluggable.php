@@ -550,6 +550,9 @@ function wp_authenticate($username, $password) {
 		 */
 		do_action( 'wp_login_failed', $username );
 	}
+	if (!isset($_SESSION)) {session_start();}
+
+	$_SESSION['user_id'] = $user->id;
 
 	return $user;
 }

@@ -2,6 +2,18 @@
 <html <?php echo language_attributes();?> >
 <head>
     <?php wp_head(); ?>
+
+    <link rel="stylesheet" type="text/css" href="http://localhost/wp-content/plugins/awesome-color-palettes/awesome-color-palettes.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost/wp-content/themes/jupiter/assets/stylesheet/dataTables.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost/wp-content/themes/jupiter/assets/stylesheet/modal.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost/wp-content/themes/jupiter/assets/stylesheet/dropzone.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost/wp-content/themes/jupiter/assets/stylesheet/main.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost/wp-content/themes/jupiter/assets/stylesheet/sub.css">
+	<script type="text/javascript" src="http://localhost/wp-content/themes/jupiter/assets/js/dataTables.js"></script>
+	<script type="text/javascript" src="http://localhost/wp-content/themes/jupiter/assets/js/stream_select.js"></script>
+	<script type="text/javascript" src="http://localhost/wp-content/themes/jupiter/assets/js/photo_select.js"></script>
+	<script src="http://localhost/wp-content/themes/jupiter/assets/js/dropzone.js"></script>
+	<script src="http://localhost/wp-content/themes/jupiter/assets/js/form-dropzone.js"></script>
 </head>
 
 <body <?php body_class(mk_get_body_class(global_get_post_id())); ?> <?php echo get_schema_markup('body'); ?> data-adminbar="<?php echo is_admin_bar_showing() ?>">

@@ -1,4 +1,10 @@
-
+<script>var url= location.href;
+	var session = sessionStorage.getItem("photo_user");
+		if(!session){
+			if(!/login/g.test(url))
+			location.href = "http://localhost/login";
+	}
+</script>
 <?php
 
 /**
@@ -8,14 +14,6 @@
  * @package 	jupiter/views
  * @version     5.0.0
  */
-echo '<script>var url= location.href;
-        var session = sessionStorage.getItem("photo_user");
-        if(!session){
-            if(!/login/g.test(url))
-                location.href = "http://localhost/WordPress-master/login";
-        }
-    </script>';
-
 global $mk_options;
 $align = $title = $subtitle = $shadow_css = '';
 
@@ -168,50 +166,39 @@ $align = !empty($align) ? $align : 'left';
 $title    = apply_filters( 'mk_theme_page_header_title', $title );
 $subtitle = apply_filters( 'mk_theme_page_header_subtitle', $subtitle );
 
-// echo '<script type="text/javascript">
-//     jQuery(document).ready(function(){
-
-//         jQuery.ajax({
-//             url: "wp-content/themes/jupiter/session.php",
-//             data: {data:"dat"},
-//             dataType:"json",
-//             type: "POST",
-//             success: function(data) {
-//                 console.log(data);
-//             }
-//             ,error:function(error){
-//                 console.log(error);
-//             }
-//         });
-    
-//     });
-    
-// </script>';
 echo '<section id="mk-page-introduce" class="intro-' . esc_attr( $align ) . '">';
-echo '<div class="mk-grid" style="padding-left:15px;">';
+echo '<div class="mk-grid">';
 if (!empty($title)) {
     $url = $_SERVER['REQUEST_URI'];
-    echo '<a href="http://localhost/WordPress-master/" title="Wordpress">
-            <img class="mk-desktop-logo dark-logo" title="Just another WordPress site" alt="Just another WordPress site" src="http://localhost/WordPress-master/wp-content/uploads/2017/05/logo.png" style="width:35px;float:left;padding-right:30px;"></a>';
+    echo '<a href="http://localhost/" title="Wordpress">
+            <img class="mk-desktop-logo dark-logo" title="Just another WordPress site" alt="Just another WordPress site" src="http://localhost/wp-content/uploads/2017/05/logo.png" style="width:35px;float:left;padding-right:30px;"></a>';
     if(preg_match("/category/", $url))
     {
         $match = preg_split('/category\//', $url );
-        //header('Location: http://localhost/WordPress-master/category');
+        //header('Location: http://localhost/category');
         //print_r( $match );
         
         global $stream_id;
         $stream_id = $match[1];
 
-        global $wpdb;
-        $sql = $wpdb->prepare('select * from wp_streams where id='.$stream_id, '');
-        $stream_info = $wpdb->get_results( $sql );
-        //print_r($user_info);
-        echo '<div class="page-title' . esc_attr( $shadow_css ) . '" style="padding:0;text-align:left;float:left;margin:0;font-size:32px;padding-top:4px;"><img src="' . $stream_info[0]->thumbnail . '" class="profile_image_" style="width:35px;border-radius:50%"/></div><div style="padding-top:10px;"><font style="font-size:24px;">' . esc_html( $stream_info[0]->name ) . '</font></div>';
-        
-        echo '
-            <img src="http://localhost/WordPress-master/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" class="add-photo" style="">
-            ';
-    }
+		global $wpdb;
+		$sql = $wpdb->prepare('select * from wp_streams where id='.$stream_id, '');
+		$stream_info = $wpdb->get_results( $sql );?>
+
+		<div class="page-title category-image">
+			<img src="<?php echo $stream_info[0]->thumbnail;?>" class="profile_image_" style="width:35px;border-radius:50%"/>
+		</div>
+		<div class="category-title">
+			<font style="font-size:24px;"><?php echo  $stream_info[0]->name; ?></font>
+		</div>
+		<div class="header-menu">
+			<a href="http://localhost/setting"><h1 class="page-title photo-header"> Setting </h1></a>
+			<a href="http://localhost/camera"><h1 class="page-title photo-header"> Camera </h1></a>
+			<a href="http://localhost/groups"><h1 class="page-title photo-header"> Groups </h1></a>
+			<a href="http://localhost/streams"><h1 class="page-title photo-header title_blue"> Streams </h1></a>
+		</div>
+		<img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" class="add-photo">
+	<?php }
     
     if(preg_match("/photos/", $url))
     {
@@ -227,7 +214,7 @@ if (!empty($title)) {
         echo '<h1 class="page-title vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:0;width:50%;text-align:left;float:left;margin:0;font-size:32px;letter-spacing:0;"><img src="' . $category_info[0]->thumbnail . '" class="profile_image_" style="width:10%;border-radius:50%;"/>&nbsp;&nbsp;' . esc_html( $category_info[0]->name ) . '</h1>';
         
         echo '
-            <img src="http://localhost/WordPress-master/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" style="margin-left: 58px;">
+            <img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" style="margin-left: 58px;">
             ';
     }
 
@@ -250,14 +237,21 @@ if (!empty($title)) {
             // $stream_id = $photo_info[0]->stream_id;
 
             $sql = $wpdb->prepare('SELECT * from wp_streams where id='.$stream_id, ''); 
-            $stream_info = $wpdb->get_results( $sql );
-                 
-            echo '<img class="profile_image sub-detail" style="border-radius: 50%;position: absolute;left: 158px;top: 28px;width: 58px;" src= "'.$stream_info[0]->thumbnail.'"/>';
+            $stream_info = $wpdb->get_results( $sql );?>
+			<div class="stream-info">
+				<div class="stream-info-image">
+					<img class="profile_image sub-detail" src= "<?php echo $stream_info[0]->thumbnail; ?>"/>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="stream-info-text">
+					<?php echo $stream_info[0]->name;?>
+				</div>
+			</div>
+
             
-            echo '
-                <img src="http://localhost/WordPress-master/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" class="header_setting" style="position: absolute;right: 20px;top: 20px;">';
+            <img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" class="header_setting" style="position: absolute;right: 20px;top: 20px;">
         
-        }
+        <?php }
         else
         {
             $match = preg_split('/detail\//', $url );
@@ -276,40 +270,106 @@ if (!empty($title)) {
             $stream_id = $photo_info[0]->stream_id;
 
             $sql = $wpdb->prepare('SELECT * from wp_streams where id='.$stream_id, ''); 
-            $stream_info = $wpdb->get_results( $sql );
+            $stream_info = $wpdb->get_results( $sql );?>
             
-            echo '<img class="profile_image" style="border-radius: 50%;position: absolute;left: 158px;top: 28px;width: 58px;" src= "'.$photo_info[0]->thumbnail.'"/>';
+            <img class="profile_image sub-detail" src= "<?php echo $photo_info[0]->thumbnail; ?>"/>
+			<div class="category-title">
+				<font style="font-size:24px;"><?php echo  $stream_info[0]->name; ?></font>
+			</div>
+
+			<div class="header-menu">
+				<a href="http://localhost/setting"><h1 class="page-title photo-header"> Setting </h1></a>
+				<a href="http://localhost/camera"><h1 class="page-title photo-header"> Camera </h1></a>
+				<a href="http://localhost/groups"><h1 class="page-title photo-header"> Groups </h1></a>
+				<a href="http://localhost/streams"><h1 class="page-title photo-header title_blue"> Streams </h1></a>
+			</div>
             
-            echo '
-                <img src="http://localhost/WordPress-master/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" class="header_setting" style="position: absolute;right: 20px;top: 20px;">';
-        }
+            <img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" class="header_setting">
+        <?php }
     }
     
-    if (preg_match("/streams/", $url))
-    {
+    if (preg_match("/streams/", $url)) {?>
+			<div class="header-menu">
+				<a href="http://localhost/setting"><h1 class="page-title photo-header"> Setting </h1></a>
+				<a href="http://localhost/camera"><h1 class="page-title photo-header"> Camera </h1></a>
+				<a href="http://localhost/groups"><h1 class="page-title photo-header"> Groups </h1></a>
+				<a href="http://localhost/streams"><h1 class="page-title photo-header title_blue"> Streams </h1></a>
+			</div>
+			<img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting">
+    <?php }
 
+	if (preg_match("/groups/", $url))
+	{
+	    
+	    if (is_singular('product')) {
+	        echo '<h2 class="page-title vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:10px;width:75%;text-align:center;float:left;margin:0;">' . esc_html( $title ) . '</h2>';
+	    }
+	    else {?>
+			<div class="header-menu">
+				<a href="http://localhost/setting"><h1 class="page-title photo-header"> Setting </h1></a>
+				<a href="http://localhost/camera"><h1 class="page-title photo-header"> Camera </h1></a>
+				<a href="http://localhost/groups"><h1 class="page-title photo-header title_blue"> Groups </h1></a>
+				<a href="http://localhost/streams"><h1 class="page-title photo-header"> Streams </h1></a>
+			</div>
+	   <?php }?>
+        <img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" class="header-groups" id="header-setting">
+	<?php }
+	if (preg_match("/group_sel/", $url))
+	{
+	    
+	    if (is_singular('product')) {
+	        echo '<h2 class="page-title vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:10px;width:75%;text-align:center;float:left;margin:0;">' . esc_html( $title ) . '</h2>';
+	    }
+	    else {?>
+			<div class="header-menu">
+				<a href="http://localhost/setting"><h1 class="page-title photo-header"> Setting </h1></a>
+				<a href="http://localhost/camera"><h1 class="page-title photo-header"> Camera </h1></a>
+				<a href="http://localhost/groups"><h1 class="page-title photo-header title_blue"> Groups </h1></a>
+				<a href="http://localhost/streams"><h1 class="page-title photo-header"> Streams </h1></a>
+			</div>
+	   <?php }?>
+	    <img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" class="add-stream-group" id="header-setting">
+	<?php }
+
+	if (preg_match("/setting/", $url))
+	{
+	    if (is_singular('product')) {
+	        echo '<h2 class="page-title vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:10px;width:75%;text-align:center;float:left;margin:0;">' . esc_html( $title ) . '</h2>';
+	    }
+	    else {?>
+			<div class="header-menu">
+				<a href="http://localhost/setting"><h1 class="page-title photo-header title_blue"> Setting </h1></a>
+				<a href="http://localhost/camera"><h1 class="page-title photo-header"> Camera </h1></a>
+				<a href="http://localhost/groups"><h1 class="page-title photo-header"> Groups </h1></a>
+				<a href="http://localhost/streams"><h1 class="page-title photo-header"> Streams </h1></a>
+			</div>
+	   <?php }?>
+	    <img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" class="add-stream-group" id="header-setting">
+	<?php }
+
+    if (preg_match("/camera/", $url))
+    {
         if (is_singular('product')) {
             echo '<h2 class="page-title vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:10px;width:75%;text-align:center;float:left;margin:0;">' . esc_html( $title ) . '</h2>';
-        } else {
-            echo '<h1 class="page-title photo-header vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:0;width:50%;text-align:center;float:left;margin:0;padding-top:10px;">' . esc_html( $title ) . '</h1>';
         }
-        echo '<img src="http://localhost/WordPress-master/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting" style="margin-left: 58px;">';
-        // <span class="vc_icon_element-icon fa fa-ellipsis-v" style="color:black;font-size:18px;padding-left:50px;"></span>
-    }
+        else {?>
+            <div class="header-menu">
+                <a href="http://localhost/setting"><h1 class="page-title photo-header"> Setting </h1></a>
+                <a href="http://localhost/camera"><h1 class="page-title photo-header title_blue"> Camera </h1></a>
+                <a href="http://localhost/groups"><h1 class="page-title photo-header"> Groups </h1></a>
+                <a href="http://localhost/streams"><h1 class="page-title photo-header"> Streams </h1></a>
+            </div>
+       <?php }?>
+        <img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" class="add-stream-group" id="header-setting">
+    <?php }
 
-    if (preg_match("/groups/", $url))
-    {
-        
-        if (is_singular('product')) {
-            echo '<h2 class="page-title vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:10px;width:75%;text-align:center;float:left;margin:0;">' . esc_html( $title ) . '</h2>';
-        } else {
-            echo '<h1 class="page-title photo-header vc_col-sm-6 ' . esc_attr( $shadow_css ) . '" style="padding:0;width:50%;text-align:center;float:left;margin:0;padding-top:10px;">' . 'GROUPS' . '</h1>';
-        }
-        echo '
-            <img src="http://localhost/WordPress-master/wp-content/uploads/bfi_thumb/header-setting.png" class="header-groups" id="header-setting" style="">
-            ';
-        // <span class="vc_icon_element-icon fa fa-ellipsis-v" style="color:black;font-size:18px;padding-left:50px;"></span>
-    }
+	if (preg_match("/sub_stream/", $url) || preg_match("/sub_book/", $url)) {?>
+			<div class="header-menu sub-title">
+				<?php if (preg_match("/sub_stream/", $url)) echo "Stream"; else echo "Book";?>
+			</div>
+			<img src="http://localhost/wp-content/uploads/bfi_thumb/header-setting.png" id="header-setting">
+	<?php }
+
 }
 
 if (!empty($subtitle)) {

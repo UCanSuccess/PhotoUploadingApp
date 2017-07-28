@@ -1,135 +1,56 @@
 <?php 
 
 $abs_string_arr = explode("\\", dirname( __FILE__ ));
-$admin_url=$abs_string_arr[0].'/'.$abs_string_arr[1].'/'.$abs_string_arr[2].'/wp-load.php';
+$admin_url=$abs_string_arr[0].'/'.$abs_string_arr[1].'/wp-load.php';
 require_once( $admin_url );
 $abs_string = implode("/", $abs_string_arr);
+global $wpdb;
+
 if($_POST['name']){
 	$name = $_POST['name'];
+	$name = implode("_", explode(" ", $name));
+	$name = implode("_", explode(",", $name));
+	$name = implode("_", explode("'", $name));
+	$name = implode("_", explode("\"", $name));
+	$name = implode("_", explode("\\", $name));
 	$email = $_POST['email'];
-	$source_type = $_FILES['fileHandler']['type'];
-	$type = ".tmp";
+	$sub_id = $_POST['sub_id'];
 
-	if ( $source_type == "image/jpeg"){	$type = ".jpg";}
-	if ( $source_type == "image/png"){ $type = ".png";}
-	if ( $source_type == "image/gif"){ $type = ".gif";}
-	if ( $source_type == "image/bmp"){ $type = ".bmp";}
+	$query = $wpdb->prepare("SELECT * FROM wp_users WHERE user_email='".$_POST['email']."'",'');
+	$user = $wpdb->get_results($query);
 
-	$url = $abs_string."/assets/images/uploads/stream/".$name.$type;
-	$thumbnail_url = $abs_string."/assets/images/uploads/stream/".$name.$type;
-	$tar_url = 'http://localhost/WordPress-master/wp-content/themes/jupiter/assets/images/uploads/stream/'.$name.$type;
+	if ($user) {
+		$upload = $wpdb -> get_results("SELECT * FROM wp_photo_temp WHERE editor_id='".$_SESSION['photo_user']."' order by id desc");
 
-	if (move_uploaded_file($_FILES['fileHandler']['tmp_name'], $url)) {
-
-		$info = getimagesize($url);
-		$source_width = $info[0];	$source_height = $info[1];
-
-		switch ($type) {
-			case '.png':
-				$src_image = imagecreatefrompng($url);
-				break;
-			case '.gif':
-				$src_image = imagecreatefromgif($url);
-				break;
-			default:
-				$src_image = imagecreatefromjpeg($url);
-				break;
-		}
-		$des_ratio = 1;
-		
-		if ($source_width/$source_height > $des_ratio)
-		{
-			$src_y = 0; $src_h = $source_height;
-			$src_w = (int)($source_height*$des_ratio);
-			$src_x = (int)(($source_width - $src_w)/2);
-		}
-		else 
-		{
-			$src_x = 0; $src_w = $source_width;
-			$src_h = (int)($source_width/$des_ratio);
-			$src_y = (int)(($source_height - $src_h)/2);
-		}
-		$dst_w = 300; $dst_h = 300;
-	
-		$tar_image = imagecreatetruecolor($dst_w, $dst_h);
-		imagecopyresized($tar_image, $src_image, 0, 0, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
-		imagejpeg($tar_image,$thumbnail_url);
-
-		global $wpdb;
-		$query = $wpdb->prepare("SELECT * FROM wp_photo_users WHERE email='".$_POST['email']."'",'');
-		$user = $wpdb->get_results($query);
-		if($user){
-			$result = $wpdb->query("INSERT INTO wp_streams (name, thumbnail, color_id , editor_id, subscriber_id) VALUES ('".$name."', '".$tar_url."', '".$_POST['color']."', '".$_SESSION['photo_user']."', '".$user[0]->user_id."')");
-			echo json_encode(array('success'));
-		}
-		echo json_encode(array('NO EXIST SUBSCRIBER'));
-	
-	} else {
-	   echo "Upload failed";
+		$result = $wpdb->query("INSERT INTO wp_streams (name, thumbnail, color_id , editor_id, subscriber_id) VALUES ('".$name."', '".$upload[0]->url."', '".$_POST['color']."', '".$_SESSION['photo_user']."', '".$user[0]->user_id."')");
+		echo json_encode(array('success'));
+	}
+	else {
+		echo json_encode(array('NO EXIST SUBSCRIBER.'));
 	}
 }
 else
 {
-	$source_type = $_FILES['fileHandler']['type'];
-	$name = $_FILES['fileHandler']['name'];
-	$type = ".tmp";
 
-	if ( $source_type == "image/jpeg"){	$type = ".jpg";}
-	if ( $source_type == "image/png"){ $type = ".png";}
-	if ( $source_type == "image/gif"){ $type = ".gif";}
-	if ( $source_type == "image/bmp"){ $type = ".bmp";}
-
-	$url = $abs_string."/assets/images/uploads/photos/".$name.$type;
-	$thumbnail_url = $abs_string."/assets/images/uploads/photos/".$name.$type;
-	$tar_url = 'http://localhost/WordPress-master/wp-content/themes/jupiter/assets/images/uploads/photos/'.$name.$type;
-
-	if (move_uploaded_file($_FILES['fileHandler']['tmp_name'], $url)) {
-
-
-
-		$info = getimagesize($url);
-		$source_width = $info[0];	$source_height = $info[1];
-
-		switch ($type) {
-			case '.png':
-				$src_image = imagecreatefrompng($url);
-				break;
-			case '.gif':
-				$src_image = imagecreatefromgif($url);
-				break;
-			default:
-				$src_image = imagecreatefromjpeg($url);
-				break;
+	$flag=0; $streams_arr=array();
+	foreach ($_POST as $key => $value) {
+		if (strstr($key,"streams")){
+			$streams_arr[$flag++] = $value;
 		}
-		$des_ratio = 1;
-		
-		if ($source_width/$source_height > $des_ratio)
-		{
-			$src_y = 0; $src_h = $source_height;
-			$src_w = (int)($source_height*$des_ratio);
-			$src_x = (int)(($source_width - $src_w)/2);
-		}
-		else 
-		{
-			$src_x = 0; $src_w = $source_width;
-			$src_h = (int)($source_width/$des_ratio);
-			$src_y = (int)(($source_height - $src_h)/2);
-		}
-		$dst_w = 600; $dst_h = 600;
-	
-		$tar_image = imagecreatetruecolor($dst_w, $dst_h);
-		imagecopyresized($tar_image, $src_image, 0, 0, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
-		imagejpeg($tar_image,$thumbnail_url);
-		
-		global $wpdb;
-		$moment = date('Y-m-d H:i:s');
-		$result = $wpdb->query("INSERT INTO wp_photos (stream_id, thumbnail, created_at) VALUES ('".$_POST['stream_id']."', '".$tar_url."', '".$moment."')");
-		echo json_encode(array('success'));
-		echo json_encode(array('NO EXIST SUBSCRIBER'));
-	  
-	} else {
-	   echo "Upload failed";
 	}
+		
+	$upload = $wpdb -> get_results("SELECT * FROM wp_photo_temp WHERE editor_id='".$_SESSION['photo_user']."' order by id desc");
+	print_r($upload[0]->url);
+
+	$moment = date('Y-m-d H:i:s');
+
+	for ($i= 0; $i < $flag; $i++) { 
+		$sub_id = $wpdb -> get_results("SELECT * FROM wp_streams WHERE id='".$streams_arr[$i]."'");
+		$result = $wpdb->query("INSERT INTO wp_photos (stream_id, thumbnail, created_at, subscriber_id, file_name) VALUES ('".$streams_arr[$i]."', '".$upload[0]->url."', '".$moment."', '".$sub_id[0]->subscriber_id."', '".$upload[0]->file_name."')");
+	}
+
+	echo json_encode(array('success'));
+	  
 }
 
 

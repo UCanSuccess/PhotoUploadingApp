@@ -1,0 +1,103 @@
+        body{
+            width: 1200px!important;
+            margin: 0 auto;
+        }
+        .content-image
+        {
+            width:50% !important;
+            margin-bottom: 0;
+            float:left;
+            padding-left:20px;
+            padding-right:20px;
+        }
+        .content-image.grid:nth-of-type(2n)
+        {
+            padding-left:10px;
+            padding-right:20px;
+        }
+        .content-image.grid:nth-of-type(2n+1)
+        {
+            padding-right:10px;
+            padding-left:20px;
+        }
+        .content-image .caption1
+        {
+            left:14%;
+        }
+
+        .content-image .caption2
+        {
+            left:25%;
+        }
+        .content-image.grid:nth-of-type(2n+1) .caption
+        {
+            left:25%;
+        }
+
+        .content-image.grid:nth-of-type(2n) .caption
+        {
+            left:20%;
+        }
+
+        .content-image.grid:nth-of-type(2n+1) .caption1
+        {
+            left:16%;
+        }
+
+        .content-image.grid:nth-of-type(2n) .caption1
+        {
+            left:10%;
+        }
+
+        .content-image.grid:nth-of-type(2n+1) .caption2
+        {
+            left:28%;
+        }
+
+        .content-image.grid:nth-of-type(2n) .caption2
+        {
+            left:22%;
+        }
+
+        .mk-header{
+            width: 1200px;
+        }
+        .photo-header{
+            width:50%;
+        }
+        
+        .theme-page-wrapper .theme-content:not(.no-padding){
+            padding:0 !important;
+        }
+        .wpb_content_element{
+            margin-bottom: 0;
+        }
+        p{
+            margin-bottom: 0;
+        }
+        .hover{
+            background-color: #44a9fc;
+        }
+        #theme-page{
+            padding-bottom: 71px!important;
+        }
+        .photo-view{
+            color:#44a9fc !important;    
+        }
+        .full-image{
+            width: 100% !important;
+        }
+        #header-setting{
+            position:absolute;
+            right:3%;
+            top:23px;
+        }
+        #mk-theme-container{
+            background: #f3f3f3!important;
+        }
+        #mk-footer{
+            width: 1200px!important;
+        }
+        .theme-page-wrapper{
+            padding: 0!important;
+        }

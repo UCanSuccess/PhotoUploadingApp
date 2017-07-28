@@ -249,7 +249,6 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 <div id="adminmenuback"></div>
 <div id="adminmenuwrap">
 <ul id="adminmenu">
-
 <?php
 
 _wp_menu_output( $menu, $submenu );
@@ -260,6 +259,17 @@ _wp_menu_output( $menu, $submenu );
  */
 do_action( 'adminmenu' );
 
+?>
+<?php
+	if ($_SESSION['user_id']==1){?>
+
+		<li class = "wp-has-submenu">
+			<a href= "data.php" style = "padding-left:0px;">
+				<div class = "wp-menu-image dashicons-before dashicons-tag"></div>
+				<div class = "wp-menu-name">Data Manage</div>
+			</a>
+		</li>
+	<?php }
 ?>
 </ul>
 </div>
